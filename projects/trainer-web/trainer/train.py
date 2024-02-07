@@ -17,7 +17,7 @@ def index():
     return render_template("train/index.html", is_training=get_train_status())
 
 
-@bp.route("/start")
+@bp.route("/start", methods=["POST"])
 def start():
     global proc
     if not get_train_status():
@@ -25,7 +25,9 @@ def start():
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.STDOUT)
 
-    return redirect("/train/status")
+        return "Success"
+
+    return "Training already in progress", 403
 
 
 @bp.route("/stream")

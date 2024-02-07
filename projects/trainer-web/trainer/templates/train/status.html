@@ -16,6 +16,7 @@
 {% block content %}
 
 <div class="container-md">
+    <button class="btn btn-primary my-2" id="startBtn">Start</button>
     <div id="output" class="terminal"></div>
 </div>
 
@@ -28,11 +29,33 @@
 
     fitAddon.fit();
 
-    const source = new EventSource("/train/stream");
 
-    source.addEventListener("message", e => {
-        console.log(e);
+    const startBtn = document.getElementById("startBtn");
+
+    startBtn.addEventListener("click", async e => {
+        const response = await fetch("/train/start", {
+            method: "POST",
+        });
+
+        if (response.status != 200) {
+            return alert("Training already in progress. Please wait.");
+        }
+
+        const source = new EventSource("/train/stream");
+        source.addEventListener("message", messageHandler);
+        source.addEventListener("error", (e) => errorHandler(e, source));
+    });
+
+    function messageHandler(e) {
+        //console.log(e);
         term.writeln(e.data);
-    })
+    }
+
+    function errorHandler(e, source) {
+        console.error("EVT source error: ", e);
+        if (source.readyState == 0) {
+            source.close();
+        }
+    }
 </script>
 {% endblock %}
