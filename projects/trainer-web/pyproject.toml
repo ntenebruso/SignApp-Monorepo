@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "trainer-web"
+version = "0.1.0"
+description = ""
+authors = ["Nick Tenebruso <nickten2006@gmail.com>"]
+license = "GPLv3"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.11"
+Flask = "^3.0.1"
+train-core = { path = "../../lib/train", develop = true }
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

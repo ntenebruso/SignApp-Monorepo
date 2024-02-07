@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-md">
+    <h1 class="mt-5">Train Model</h1>
+    <a class="btn btn-primary {{ 'disabled' if is_training }}" href="/train/start">Start training session</a>
+    {% if is_training %}
+        <p>Training currently in progress</p>
+    {% endif %}
+</div>
+{% endblock %}

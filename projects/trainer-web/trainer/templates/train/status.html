@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block head %}
+<script src="{{ url_for('static', filename='vendor/xterm/xterm.min.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/xterm/xterm-addon-fit.min.js') }}"></script>
+<link rel="stylesheet" type="text/css"
+      href="{{ url_for('static', filename='vendor/xterm/xterm.css') }}">
+
+<style>
+    .terminal {
+        height: 500px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container-md">
+    <div id="output" class="terminal"></div>
+</div>
+
+<script>
+    const term = new Terminal();
+    const fitAddon = new FitAddon.FitAddon();
+    term.loadAddon(fitAddon);
+
+    term.open(document.getElementById("output"));
+
+    fitAddon.fit();
+
+    const source = new EventSource("/train/stream");
+
+    source.addEventListener("message", e => {
+        console.log(e);
+        term.writeln(e.data);
+    })
+</script>
+{% endblock %}
